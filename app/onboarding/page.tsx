@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useNotionConfig } from '../hooks/useNotionConfig';
+import { createRoom } from '../utils/storage';
 import {
   validateNotionToken,
   validateDatabaseId,
@@ -15,13 +15,13 @@ import Step3Complete from '../components/onboarding/Step3Complete';
 
 export default function OnboardingPage() {
   const router = useRouter();
-  const { updateConfig } = useNotionConfig();
 
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
     notionToken: '',
     databaseId: '',
     userName: '',
+    roomName: '',
   });
   const [errors, setErrors] = useState({});
 
@@ -60,12 +60,23 @@ export default function OnboardingPage() {
 
   // Step 3 검증
   const validateStep3 = () => {
+    const newErrors: any = {};
+
     if (!validateUserName(formData.userName)) {
-      setErrors({
-        userName: '사용자 이름을 입력해주세요 (1-50자).',
-      });
+      newErrors.userName = '사용자 이름을 입력해주세요 (1-50자).';
+    }
+
+    if (!formData.roomName || formData.roomName.trim().length === 0) {
+      newErrors.roomName = '채팅방 이름을 입력해주세요.';
+    } else if (formData.roomName.trim().length > 50) {
+      newErrors.roomName = '채팅방 이름은 50자 이내로 입력해주세요.';
+    }
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
       return false;
     }
+
     setErrors({});
     return true;
   };
@@ -97,17 +108,21 @@ export default function OnboardingPage() {
       return;
     }
 
-    // 설정 저장
-    updateConfig({
-      ...formData,
-      pollingInterval: 5000,
-      theme: 'light',
-      autoScroll: true,
-      soundEnabled: false,
+    // 새 채팅방 생성
+    const roomId = createRoom({
+      token: formData.notionToken,
+      databaseId: formData.databaseId,
+      roomName: formData.roomName.trim(),
+      userName: formData.userName,
     });
 
-    // 채팅 페이지로 이동
-    router.push('/chat');
+    if (!roomId) {
+      setErrors({ general: '채팅방 생성에 실패했습니다. 다시 시도해주세요.' });
+      return;
+    }
+
+    // 채팅 페이지로 이동 (roomId 포함)
+    router.push(`/chat?room=${roomId}`);
   };
 
   return (

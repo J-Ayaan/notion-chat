@@ -1,6 +1,8 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { getRoom, setCurrentRoom, getCurrentRoom } from '../utils/storage';
 import { useNotionConfig } from '../hooks/useNotionConfig';
 import { useMessages } from '../hooks/useMessages';
 import ChatHeader from '../components/chat/ChatHeader';
@@ -9,9 +11,55 @@ import ChatMessage from '../components/chat/ChatMessage';
 import ChatInput from '../components/chat/ChatInput';
 
 export default function ChatPage() {
-  const { config } = useNotionConfig();
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const roomIdFromUrl = searchParams.get('room');
+
+  const [room, setRoom] = useState(null);
   const [selectedChannel, setSelectedChannel] = useState('일반');
   const [showSidebar, setShowSidebar] = useState(false);
+
+  // 채팅방 로드
+  useEffect(() => {
+    const loadRoom = () => {
+      // URL에서 roomId 가져오기 또는 현재 선택된 roomId 사용
+      const roomId = roomIdFromUrl || getCurrentRoom();
+
+      if (!roomId) {
+        // 채팅방이 없으면 rooms 페이지로 이동
+        router.push('/rooms');
+        return;
+      }
+
+      const loadedRoom = getRoom(roomId);
+
+      if (!loadedRoom) {
+        // 유효하지 않은 채팅방이면 rooms 페이지로 이동
+        router.push('/rooms');
+        return;
+      }
+
+      // 현재 채팅방 설정 (lastAccessed 업데이트)
+      setCurrentRoom(roomId);
+      setRoom(loadedRoom);
+
+      // 첫 번째 채널을 기본 선택
+      if (loadedRoom.channels && loadedRoom.channels.length > 0) {
+        setSelectedChannel(loadedRoom.channels[0]);
+      }
+    };
+
+    loadRoom();
+  }, [roomIdFromUrl, router]);
+
+  // config 생성 (기존 hooks와 호환성 유지)
+  const config = room ? {
+    notionToken: room.token,
+    databaseId: room.databaseId,
+    userName: room.myName,
+    pollingInterval: 5000,
+    autoScroll: true,
+  } : null;
 
   const { messages, isLoading, error, isSending, send, refresh, clearError } =
     useMessages(config, selectedChannel, config?.pollingInterval || 5000);
@@ -19,15 +67,11 @@ export default function ChatPage() {
   const messagesEndRef = useRef(null);
 
   // 자동 스크롤
-  const scrollToBottom = () => {
+  useEffect(() => {
     if (config?.autoScroll !== false) {
       messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     }
-  };
-
-  useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
+  }, [messages, config?.autoScroll]);
 
   // 채널 선택
   const handleChannelSelect = (channel: string) => {
@@ -45,6 +89,20 @@ export default function ChatPage() {
     return await send(content, config?.userName);
   };
 
+  // 채팅방이 로드되지 않았으면 로딩 표시
+  if (!room) {
+    return (
+      <div className="flex h-screen items-center justify-center bg-gray-50">
+        <div className="text-center">
+          <span className="material-icons text-6xl text-blue-500 animate-spin mb-4">
+            refresh
+          </span>
+          <p className="text-gray-600">채팅방을 불러오는 중...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="flex h-screen bg-gray-50 overflow-hidden">
       {/* Sidebar */}
@@ -52,6 +110,8 @@ export default function ChatPage() {
         selectedChannel={selectedChannel}
         onChannelSelect={handleChannelSelect}
         showSidebar={showSidebar}
+        channels={room.channels}
+        roomName={room.name}
       />
 
       {/* Overlay for mobile */}

@@ -33,6 +33,14 @@ export default function ChatHeader({
 
       <div className="flex items-center gap-2">
         <button
+          onClick={() => router.push('/rooms')}
+          className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+          title="채팅방 목록"
+          aria-label="Rooms"
+        >
+          <span className="material-icons">home</span>
+        </button>
+        <button
           onClick={onRefresh}
           disabled={isLoading}
           className="p-2 hover:bg-gray-100 rounded-lg transition-colors disabled:opacity-50"

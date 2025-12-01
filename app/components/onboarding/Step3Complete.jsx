@@ -33,6 +33,23 @@ export default function Step3Complete({
       </div>
 
       <label className="block mb-2 font-medium text-gray-700">
+        채팅방 이름:
+      </label>
+      <input
+        type="text"
+        placeholder="우리 팀 채팅방"
+        className="w-full px-4 py-3 border border-gray-300 rounded-lg mb-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        value={formData.roomName}
+        onChange={(e) => setFormData({ ...formData, roomName: e.target.value })}
+      />
+      {errors.roomName && (
+        <p className="text-red-500 text-sm mb-4 flex items-center gap-1">
+          <span className="material-icons text-sm">error</span>
+          {errors.roomName}
+        </p>
+      )}
+
+      <label className="block mb-2 font-medium text-gray-700">
         사용자 이름:
       </label>
       <input
@@ -57,15 +74,15 @@ export default function Step3Complete({
         <ul className="text-sm space-y-1 text-gray-700">
           <li className="flex items-start gap-2">
             <span className="material-icons text-xs mt-0.5">circle</span>
-            설정은 언제든 변경 가능 (⚙️ 버튼)
+            여러 채팅방을 만들고 자유롭게 전환 가능
           </li>
           <li className="flex items-start gap-2">
             <span className="material-icons text-xs mt-0.5">circle</span>
-            노션에 임베드하려면 설정에서 코드 복사
+            채널은 설정에서 추가/수정/삭제 가능
           </li>
           <li className="flex items-start gap-2">
             <span className="material-icons text-xs mt-0.5">circle</span>
-            채널은 노션 DB에서 직접 추가/수정 가능
+            초대 링크를 생성하여 다른 사용자 초대 가능
           </li>
         </ul>
       </div>
