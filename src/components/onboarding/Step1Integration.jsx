@@ -38,7 +38,7 @@ export default function Step1Integration({ formData, setFormData, errors, onNext
       </label>
       <input
         type="password"
-        placeholder="secret_xxxxxxxxxxxxxxxx"
+        placeholder="secret_xxx... 또는 ntn_xxx..."
         className="w-full px-4 py-3 border border-gray-300 rounded-lg mb-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
         value={formData.notionToken}
         onChange={(e) =>

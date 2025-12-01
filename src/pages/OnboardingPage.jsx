@@ -29,7 +29,7 @@ export default function OnboardingPage() {
     if (!validateNotionToken(formData.notionToken)) {
       setErrors({
         token:
-          'Token 형식이 올바르지 않습니다. secret_으로 시작하는 50자 문자열이어야 합니다.',
+          'Token 형식이 올바르지 않습니다. secret_ 또는 ntn_으로 시작하는 Notion Integration Token을 입력해주세요.',
       });
       return false;
     }

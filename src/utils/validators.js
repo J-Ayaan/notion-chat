@@ -11,9 +11,15 @@ export const validateNotionToken = (token) => {
     return false;
   }
 
-  // Notion Token 형식: secret_으로 시작하는 50자 문자열
-  const regex = /^secret_[a-zA-Z0-9]{43}$/;
-  return regex.test(token.trim());
+  const trimmedToken = token.trim();
+
+  // Notion Token 형식 (두 가지 지원):
+  // 1. 구형: secret_으로 시작하는 50자 문자열
+  // 2. 신형: ntn_으로 시작하는 가변 길이 문자열
+  const secretRegex = /^secret_[a-zA-Z0-9]{43}$/;
+  const ntnRegex = /^ntn_[a-zA-Z0-9]{40,}$/;
+
+  return secretRegex.test(trimmedToken) || ntnRegex.test(trimmedToken);
 };
 
 /**
