@@ -29,12 +29,18 @@
 npm install
 ```
 
-#### 2. 개발 서버 실행
+#### 2. Vercel CLI 설치 (필수!)
 ```bash
-npm run dev
+npm install -g vercel
 ```
 
-#### 3. 빌드
+#### 3. 개발 서버 실행 (Serverless Functions 포함)
+```bash
+vercel dev
+```
+⚠️ **중요**: `npm run dev` 대신 `vercel dev`를 사용해야 `/api` 엔드포인트가 작동합니다!
+
+#### 4. 빌드
 ```bash
 npm run build
 ```

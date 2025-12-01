@@ -40,10 +40,17 @@
 ```bash
 # 터미널에서 실행
 cd /Users/jeongjungyeong/develop/notion_chat
-npm run dev
+
+# Vercel CLI 설치 (처음 한 번만)
+npm install -g vercel
+
+# 개발 서버 실행 (⚠️ npm run dev가 아님!)
+vercel dev
 ```
 
 브라우저에서 `http://localhost:3000` 접속
+
+⚠️ **중요**: `vercel dev`를 사용해야 API가 작동합니다!
 
 ---
 
