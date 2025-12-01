@@ -41,6 +41,11 @@ npm run build
 
 ## 📖 문서
 
+### 시작하기
+- **[빠른 시작 (5분)](./QUICK_START.md)** ⭐ 처음 사용하시나요? 여기부터!
+- [상세 설정 가이드](./SETUP_GUIDE.md) - 단계별 설정 및 문제 해결
+
+### 개발자용
 - [사용자 가이드](./notionchat-saas-guide.md) - 상세한 서비스 기획서
 - [배포 가이드](./DEPLOY.md) - Vercel 배포 방법
 - [기여 가이드](./CONTRIBUTING.md) - 개발 참여 방법
