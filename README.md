@@ -2,6 +2,9 @@
 
 노션을 백엔드로 사용하는 팀 채팅 솔루션
 
+[![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Vercel](https://img.shields.io/badge/deploy-vercel-black.svg)](DEPLOY.md)
+
 ## ✨ 특징
 
 - 🆓 **완전 무료** - 서버 비용 없음
@@ -9,27 +12,38 @@
 - 📱 **모바일 최적화** - 어디서나 사용
 - 🎨 **커스터마이징** - 채널/속성 자유 수정
 - ⚡ **빠른 설정** - 3분이면 충분
+- 🌐 **오픈소스** - MIT 라이선스
 
-## 🛠️ 로컬 개발
+## 🚀 빠른 시작
 
-### 1. 의존성 설치
+### 사용자용
+
+1. [배포된 사이트](https://your-domain.vercel.app) 접속
+2. "시작하기" 클릭
+3. 가이드를 따라 3분 안에 설정 완료
+
+### 개발자용
+
+#### 1. 의존성 설치
 ```bash
 npm install
 ```
 
-### 2. 개발 서버 실행
+#### 2. 개발 서버 실행
 ```bash
 npm run dev
 ```
 
-### 3. 빌드
+#### 3. 빌드
 ```bash
 npm run build
 ```
 
-## 📖 사용 가이드
+## 📖 문서
 
-자세한 가이드는 [notionchat-saas-guide.md](./notionchat-saas-guide.md) 파일을 참고하세요.
+- [사용자 가이드](./notionchat-saas-guide.md) - 상세한 서비스 기획서
+- [배포 가이드](./DEPLOY.md) - Vercel 배포 방법
+- [기여 가이드](./CONTRIBUTING.md) - 개발 참여 방법
 
 ## 🏗️ 프로젝트 구조
 
